@@ -1,0 +1,32 @@
+name: VEERA AI 24-7 Autonomous Engine
+
+on:
+  schedule:
+    - cron: '0 */6 * * *' # Runs every 6 hours automatically
+  workflow_dispatch: # Allows manual trigger from GitHub UI
+
+jobs:
+  run-agents:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Run Orchestrator Simulation
+        run: |
+          python3 agents/orchestrator.py
+
+      - name: Commit and Push Generated Assets
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --global user.name "Veera AI Agent"
+          git config --global user.email "bot@veera.ai"
+          git add output/
+          git commit -m "Autonomous agent build iteration [skip ci]" || echo "No changes to commit"
+          git push
