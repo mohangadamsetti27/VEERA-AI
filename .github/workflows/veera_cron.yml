@@ -2,18 +2,21 @@ name: VEERA AI 24-7 Autonomous Engine
 
 on:
   schedule:
-    - cron: '0 */6 * * *' # Runs every 6 hours automatically
-  workflow_dispatch: # Allows manual trigger from GitHub UI
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   run-agents:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
